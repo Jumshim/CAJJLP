@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -33,6 +33,7 @@ const formSchema = z
   });
 
 export default function Signup() {
+  const error, setError = useEffect(false);
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -44,6 +45,25 @@ export default function Signup() {
 
   function onSubmit(values) {
     console.log(values);
+
+    const requestBody = {
+      user: { username: values.username, password: values.password },
+    };
+
+    fetch("/user/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    }).then(response => {
+      if (!response.ok) {
+        setError(true);
+        return;
+      }
+      setError(false);
+      console.log('Success!');
+    });
   }
 
   return (
@@ -56,6 +76,9 @@ export default function Signup() {
             <p className="text-sm text-muted-foreground">
               Sign up now to access the rest of PokePortal!
             </p>
+            {
+              error && <p className="text-sm text-red-400"> Error during signup. Username taken </p>
+            }
             <Form {...form} className="flex flex-1 items-start">
               <form
                 onSubmit={form.handleSubmit(onSubmit)}

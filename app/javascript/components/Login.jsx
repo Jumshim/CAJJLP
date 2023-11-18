@@ -43,14 +43,17 @@ export default function Login() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(requestBody),
-    }).then((response) => {
-      if (!response.ok) {
-        setError(true);
-        return;
-      }
-      setError(false);
-      console.log("Success!");
-    });
+    })
+      .then((response) => {
+        if (!response.ok) {
+          setError(true);
+          return;
+        }
+        setError(false);
+        console.log("Success!");
+        return response.json();
+      })
+      .then((data) => console.log(data.token));
   }
 
   return (

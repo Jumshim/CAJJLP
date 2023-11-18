@@ -9,7 +9,9 @@ export default () => (
         PokePortal
       </h1>
       <p>A central hub for all of your Pokemon needs.</p>
-      <Button> Enter </Button>
+      <Button asChild>
+        <Link to="/forum"> Home </Link>
+      </Button>
     </div>
   </div>
 );

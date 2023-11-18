@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -25,6 +24,7 @@ const formSchema = z.object({
 });
 
 export default function Login() {
+  const [error, setError] = useState(false);
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,7 +34,23 @@ export default function Login() {
   });
 
   function onSubmit(values) {
-    console.log(values);
+    const requestBody = {
+      user: { username: values.username, password: values.password },
+    };
+    fetch("/user/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    }).then((response) => {
+      if (!response.ok) {
+        setError(true);
+        return;
+      }
+      setError(false);
+      console.log("Success!");
+    });
   }
 
   return (

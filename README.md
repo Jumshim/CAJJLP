@@ -8,9 +8,9 @@ Team: CAJJLP
 * Laasya Koduru
 * Parker Carlson
 
-## Ruby version
-This project was established with **ruby 3.1.0**
-When running this project, please ensure that you have **ruby 3.1.0** installed
+## Version
+This project was established with **ruby 3.1.0** and **node >= 17.0.0**
+When running this project, please ensure that you have **ruby 3.1.0** and **node >= 17.0.0** installed
 
 ## Configuration
 ### For Local Development

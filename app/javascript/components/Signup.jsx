@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -35,6 +36,7 @@ const formSchema = z
 
 export default function Signup() {
   let { error, setError } = useState(false);
+  const navigate = useNavigate();
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -62,14 +64,16 @@ export default function Signup() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(requestBody),
-    }).then((response) => {
-      if (!response.ok) {
-        setError(true);
-        return;
-      }
-      setError(false);
-      console.log("Success!");
-    });
+    })
+      .then((response) => {
+        if (!response.ok) {
+          setError(true);
+          return;
+        }
+        setError(false);
+        console.log("Success!");
+      })
+      .then(navigate("/login"));
   }
 
   return (

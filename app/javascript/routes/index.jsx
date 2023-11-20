@@ -5,6 +5,7 @@ import Welcome from "../components/Welcome";
 import Login from "../components/Login";
 import Signup from "../components/Signup";
 
+/** Routes of our website. When adding a new route, please append here. */
 export default function RouteIndex() {
   return (
     <div className="h-screen">

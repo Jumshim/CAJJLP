@@ -15,6 +15,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { MainHeader } from "./helpers/main-header";
 
+/** Signup form schema made through Zod to perform front-end field validations  */
 const formSchema = z
   .object({
     username: z.string().min(2, {
@@ -42,6 +43,11 @@ export default function Signup() {
       confirmPassword: "",
     },
   });
+
+  /** When a user sends username and password info, sends a POST request to the backend server to create a user.
+   * If a username is already taken, the POST request would send back an error, and this will
+   * properly reflect on the frontend.
+   */
 
   function onSubmit(values) {
     console.log(values);

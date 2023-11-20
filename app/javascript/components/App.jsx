@@ -4,7 +4,7 @@ import { AuthProvider } from "./AuthProvider";
 
 export default function App(props) {
   return (
-    <AuthProvider value={{ token, setToken }}>
+    <AuthProvider>
       <RouteIndex />
     </AuthProvider>
   );

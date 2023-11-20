@@ -2,6 +2,7 @@ import React from "react";
 
 import { Link } from "react-router-dom";
 
+/** Created the Navigation skeleton for reuse in future pages. */
 export function MainNav() {
   return (
     <nav className="flex items-center space-x-6 lg:space-x-8">

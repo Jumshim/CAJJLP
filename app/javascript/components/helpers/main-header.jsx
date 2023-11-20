@@ -4,6 +4,7 @@ import "@/app/globals.css";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Link } from "react-router-dom";
 
+/** Created a Header Skeleton to that we can use in every page.  */
 export function MainHeader() {
   return (
     <div className="flex flex-1 flex-row justify-between p-6">

@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -15,6 +16,7 @@ import { Input } from "./ui/input";
 import { MainHeader } from "./helpers/main-header";
 import { AuthContext } from "./AuthProvider";
 
+/** Form schema made with zod to ensure front-end username and password checks*/
 const formSchema = z.object({
   username: z.string().min(2, {
     message: "Username can't be empty!",
@@ -25,11 +27,12 @@ const formSchema = z.object({
 });
 
 export default function Login() {
+  /** Setting up initial React hooks */
   const [error, setError] = useState(false);
-
+  const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
-  /**Setting up the Login Form */
+  /** Setting up the Login Form */
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -65,6 +68,7 @@ export default function Login() {
       })
       .then((data) => {
         login(data.token);
+        navigate("/forum");
       });
   }
 

@@ -37,3 +37,7 @@ This project is configured with a Ruby on Rails backend and a React frontend
 * Deployment instructions
 
 * ...
+
+
+## TODO:
+- [ ] Assign 3 people to load testing and 3 peopl focuse on battles, forums and connections

@@ -41,6 +41,7 @@
     "dlx": "^0.2.1",
     "esbuild": "^0.19.5",
     "react": "^18.2.0",
+    "react-auth-verification-context": "^0.0.7",
     "react-day-picker": "^8.9.1",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.48.2",

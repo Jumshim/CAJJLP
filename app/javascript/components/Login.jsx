@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -13,6 +13,7 @@ import {
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { MainHeader } from "./helpers/main-header";
+import { AuthContext } from "./AuthProvider";
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -25,6 +26,10 @@ const formSchema = z.object({
 
 export default function Login() {
   const [error, setError] = useState(false);
+
+  const { login } = useContext(AuthContext);
+
+  /**Setting up the Login Form */
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,6 +38,12 @@ export default function Login() {
     },
   });
 
+  /** Handling what happens after someone logs in
+   * 1) Configure a request body with the username and password
+   * 2) Send a post request to the backend /login endpoint
+   * 3) Receive either an error or valid JWT token
+   * 4) If JWT token, login by setting the JWT into context and sessionStorage
+   */
   function onSubmit(values) {
     const requestBody = {
       user: { username: values.username, password: values.password },
@@ -50,10 +61,11 @@ export default function Login() {
           return;
         }
         setError(false);
-        console.log("Success!");
         return response.json();
       })
-      .then((data) => console.log(data.token));
+      .then((data) => {
+        login(data.token);
+      });
   }
 
   return (

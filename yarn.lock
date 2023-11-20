@@ -2738,6 +2738,7 @@ __metadata:
     esbuild: "npm:^0.19.5"
     postcss: "npm:^8.4.31"
     react: "npm:^18.2.0"
+    react-auth-verification-context: "npm:^0.0.7"
     react-day-picker: "npm:^8.9.1"
     react-dom: "npm:^18.2.0"
     react-hook-form: "npm:^7.48.2"
@@ -4625,6 +4626,15 @@ __metadata:
   bin:
     qunit: bin/qunit.js
   checksum: 1d3dcd5bc1c2940a478564f19982becbe0aa71b87cdff9e632f4d0fb4eadaefa39005bfb0f604f9f51fa2a6da1db857a2b250ac01e958494c1282e659a5295e8
+  languageName: node
+  linkType: hard
+
+"react-auth-verification-context@npm:^0.0.7":
+  version: 0.0.7
+  resolution: "react-auth-verification-context@npm:0.0.7"
+  peerDependencies:
+    react: ^18.2.0
+  checksum: 29b136e330cd012b6dc38dcfa1a4867e7bda069ecc968da66f7017906ff227dd45ae0478a5d8eaa153c57884ac8c88eac09e70797a46c9e695989b1ae493da8d
   languageName: node
   linkType: hard
 

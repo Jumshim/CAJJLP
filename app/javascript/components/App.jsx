@@ -1,4 +1,11 @@
-import React from "react";
-import Routes from "../routes";
+import React, { useEffect } from "react";
+import RouteIndex from "../routes";
+import { AuthProvider } from "./AuthProvider";
 
-export default props => <>{Routes}</>;
+export default function App(props) {
+  return (
+    <AuthProvider value={{ token, setToken }}>
+      <RouteIndex />
+    </AuthProvider>
+  );
+}

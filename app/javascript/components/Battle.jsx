@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button } from "@/app/javascript/components/ui/button";
 import { MainHeader } from "./helpers/main-header";
 import { Separator } from "./ui/separator";
@@ -21,6 +21,80 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { cn } from "@/lib/utils";
 import { Calendar } from "./ui/calendar";
 import { format } from "date-fns";
+import { useToast } from "./ui/use-toast";
+import { Toaster } from "./ui/toaster";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
+
+export function BattleCard({
+  title,
+  description,
+  username,
+  battle_type,
+  date,
+}) {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p>
+          {username} wants to play a {battle_type} match at:
+        </p>
+        <p>{date}</p>
+      </CardContent>
+      <CardFooter>
+        <p>Please wait for connections to be implemented</p>
+      </CardFooter>
+    </Card>
+  );
+}
+
+export function Battles() {
+  const [battles, setBattles] = useState([]);
+
+  useEffect(() => {
+    getBattles();
+  }, []);
+
+  function getBattles() {
+    fetch("/battles")
+      .then((response) => {
+        if (!response.ok) {
+          console.log("ERROR");
+          return;
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setBattles(data);
+      });
+  }
+
+  return (
+    <React.Fragment>
+      {battles?.map((battle) => (
+        <div key={battle.id} className="col-span-1">
+          <BattleCard
+            title={battle.title}
+            description={battle.description}
+            username={battle.user.username}
+            battle_type={battle.battle_type}
+            date={battle.date}
+          />
+        </div>
+      ))}
+    </React.Fragment>
+  );
+}
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -29,14 +103,15 @@ const formSchema = z.object({
   description: z.string().min(2, {
     message: "Must create a description",
   }),
-  type: z.string().min(2, {
+  battle_type: z.string().min(2, {
     message: "Must select a type",
   }),
   date: z.date(),
 });
 
 export function BattleForm() {
-  const token = useContext(AuthContext);
+  const { token } = useContext(AuthContext);
+  const { toast } = useToast();
   const defaultValues = {
     title: "",
     description: "",
@@ -60,7 +135,7 @@ export function BattleForm() {
       },
     };
 
-    fetch("/battle/create", {
+    fetch("/battles/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -68,8 +143,26 @@ export function BattleForm() {
       },
       body: JSON.stringify(requestBody),
     })
-      .then((response) => response.json())
-      .then((data) => console.log(data));
+      .then((response) => {
+        if (!response.ok) {
+          return;
+        }
+        console.log("UPDATING!");
+        return response.json();
+      })
+      .then((data) => {
+        toast({
+          title:
+            "You've successfully created a battle with the following values:",
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <code className="text-white">
+                {JSON.stringify(data, null, 2)}
+              </code>
+            </pre>
+          ),
+        });
+      });
   }
 
   return (
@@ -179,7 +272,8 @@ export function BattlePopover() {
 }
 
 export default function Battle() {
-  const token = useContext(AuthContext);
+  const { token } = useContext(AuthContext);
+  console.log(token);
   return (
     <div>
       <MainHeader />
@@ -192,16 +286,25 @@ export default function Battle() {
             <p className="text-muted-foreground">
               Challenge other players and schedule your matches
             </p>
+            {!token && (
+              <p className="text-muted-foreground pt-3">
+                {" "}
+                Login to create your own posting!{" "}
+              </p>
+            )}
           </div>
-          <div className="mr-12">
-            <BattlePopover />
-          </div>
+          {token && (
+            <div className="mr-12">
+              <BattlePopover />
+            </div>
+          )}
         </div>
         <Separator className="my-6" />
-        <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
-          <div className="flex-1 lg:max-w-2xl"></div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Battles />
         </div>
       </div>
+      <Toaster />
     </div>
   );
 }

@@ -11,8 +11,8 @@ Rails.application.routes.draw do
   post '/user/update', to: 'user#update'
   get  '/user/info', to: 'user#get_info'
   # Defines the root path route ("/")
-
-  post '/battle/creat', to: 'battle#create'
+  get '/battles', to: 'battles#index'
+  post '/battles/create', to: 'battles#create'
   # root "posts#index"
   get '*path', to: 'homepage#index', constraints: ->(request) do
     !request.xhr? && request.format.html?

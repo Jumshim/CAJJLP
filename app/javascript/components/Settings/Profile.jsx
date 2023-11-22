@@ -102,20 +102,23 @@ export function ProfileForm() {
         if (!response.ok) {
           return;
         }
-        console.log("UPDATING!");
+        return response.json();
+      })
+      .then((data) => {
+        user = data?.user;
         toast({
           title:
             "You've successfully updated your profile to the following values:",
           description: (
             <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-              <code className="text-white">
-                {JSON.stringify(response.body, null, 2)}
-              </code>
+              <div className="text-white">
+                <p>Profile Pic: {user.profile_pic}</p>
+                <p>Username: {user.username}</p>
+                <p>Bio: {user.bio}</p>
+              </div>
             </pre>
           ),
         });
-      })
-      .then((data) => {
         navigate("/settings/profile");
       });
   }

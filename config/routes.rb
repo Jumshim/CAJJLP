@@ -17,4 +17,6 @@ Rails.application.routes.draw do
   get '*path', to: 'homepage#index', constraints: ->(request) do
     !request.xhr? && request.format.html?
   end
+
+  resources :posts
 end

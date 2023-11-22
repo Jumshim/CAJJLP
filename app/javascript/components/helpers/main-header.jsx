@@ -54,6 +54,10 @@ export function MainHeader() {
               <DropdownMenuItem>
                 <a href="/settings/battles">My Battles</a>
               </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <button onClick={logout}>Sign Out</button>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

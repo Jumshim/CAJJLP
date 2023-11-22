@@ -1,4 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { Separator } from "../ui/separator";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
@@ -18,6 +20,8 @@ import Settings from "./Settings";
 import { Textarea } from "../ui/textarea";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { toast } from "../ui/use-toast";
+import { AuthContext } from "../AuthProvider";
+import { Toaster } from "../ui/toaster";
 
 const profileFormSchema = z.object({
   username: z.string().min(2, {
@@ -30,26 +34,53 @@ const profileFormSchema = z.object({
   profile_pic: z.string().max(160).min(2).optional(),
 });
 
-const defaultValues = {
-  username: "Test Username",
-  bio: "Test biography",
-  password: "",
-  profile_pic:
-    "https://i.pinimg.com/originals/09/da/92/09da926c2b94d95008a9e3b2f60bfdd3.png",
-};
-
 export function ProfileForm() {
   const { token, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [formDefaults, setFormDefaults] = useState({
+    username: "",
+    password: "",
+    bio: "",
+    profile_pic:
+      "https://i.pinimg.com/originals/09/da/92/09da926c2b94d95008a9e3b2f60bfdd3.png",
+  });
+
   const form = useForm({
     resolver: zodResolver(profileFormSchema),
-    defaultValues,
+    formDefaults,
     mode: "onChange",
   });
 
-  /** TODO establish link with the backend */
+  useEffect(() => {
+    updateDefaultValues();
+  }, [token]);
+
+  function updateDefaultValues() {
+    fetch("/user/info", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          console.log("ERROR");
+          return;
+        }
+        return response.json();
+      })
+      .then((data) => {
+        user = data?.user;
+        setFormDefaults({
+          username: user.username,
+          bio: user.bio,
+          profile_pic: user.profile_pic,
+        });
+      });
+  }
 
   function onSubmit(values) {
-    console.log("on submit triggered");
     const requestBody = {
       user: {
         username: values.username,
@@ -78,13 +109,15 @@ export function ProfileForm() {
           description: (
             <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
               <code className="text-white">
-                {JSON.stringify(data, null, 2)}
+                {JSON.stringify(response.body, null, 2)}
               </code>
             </pre>
           ),
         });
       })
-      .then(navigate("/settings/profile"));
+      .then((data) => {
+        navigate("/settings/profile");
+      });
   }
   return (
     <Form {...form}>
@@ -96,10 +129,10 @@ export function ProfileForm() {
             <FormItem>
               <FormLabel>Profile Picture URL</FormLabel>
               <FormControl>
-                <Input placeholder="" {...field} />
+                <Input placeholder={formDefaults.profile_pic} {...field} />
               </FormControl>
               <Avatar>
-                <AvatarImage src={field.value || defaultValues.profile_pic} />
+                <AvatarImage src={field.value || formDefaults.profile_pic} />
               </Avatar>
             </FormItem>
           )}
@@ -111,7 +144,7 @@ export function ProfileForm() {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input placeholder={defaultValues.username} {...field} />
+                <Input placeholder={formDefaults.username} {...field} />
               </FormControl>
               <FormDescription>
                 This is your public display name. It can be your real name or
@@ -142,7 +175,7 @@ export function ProfileForm() {
               <FormLabel>Bio</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder={defaultValues.bio}
+                  placeholder={formDefaults.bio}
                   className="resize-none"
                   {...field}
                 />
@@ -168,6 +201,7 @@ export default function Profile() {
       </div>
       <Separator />
       <ProfileForm />
+      <Toaster />
     </div>
   );
 }

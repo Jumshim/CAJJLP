@@ -10,21 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema[7.1].define(version: 2023_11_21_190725) do
-=======
-ActiveRecord::Schema[7.1].define(version: 2023_11_20_191219) do
->>>>>>> 113cad9 (update profile page)
+ActiveRecord::Schema[7.1].define(version: 2023_11_22_084341) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "battles", force: :cascade do |t|
-    t.string "title"
-    t.text "body"
+    t.text "title"
+    t.text "description"
     t.date "date"
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "battle_type"
     t.index ["user_id"], name: "index_battles_on_user_id"
   end
 

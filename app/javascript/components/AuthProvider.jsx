@@ -1,4 +1,5 @@
-import React from "react";
+import { jwtDecode } from "jwt-decode";
+import React, { useEffect } from "react";
 import { useState } from "react";
 
 import { createContext } from "react";
@@ -27,6 +28,17 @@ export const AuthProvider = ({ children }) => {
     sessionStorage.removeItem("token");
     setToken(null);
   };
+
+  useEffect(() => {
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      const currentTime = Date.now() / 1000; // Convert to seconds
+
+      if (decodedToken.exp < currentTime) {
+        logout(); // Token is expired, log the user out
+      }
+    }
+  }, [token]);
 
   return (
     <AuthContext.Provider value={{ token, login, logout }}>

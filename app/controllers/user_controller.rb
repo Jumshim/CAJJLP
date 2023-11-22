@@ -66,16 +66,30 @@ class UserController < ApplicationController
   end
 
   def update
-    authorization_token = request.headers['Authorization'].split(' ').last
-    id = decode_jwt(authorization_token)
-
-    user = User.find_by(id: id)
+    user = find_user(request)
 
     if user.update(user_params)
       render json: { status: "User updated successfully", user: user }, status: :ok
     else
       render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
     end
+  end
+
+  def get_info
+    user = find_user(request)
+
+    if user
+      render json: {status: "User found successfully", user: user}, status: :ok
+    else
+      render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  def find_user(request)
+    authorization_token = request.headers['Authorization'].split(' ').last
+    id = decode_jwt(authorization_token)
+
+    return User.find_by(id: id)
   end
 
   private

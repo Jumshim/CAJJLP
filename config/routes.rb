@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 
   post '/user/signup', to: 'user#create'
   post '/user/login', to: 'user#login'
+  post '/user/update', to: 'user#update'
   # Defines the root path route ("/")
   # root "posts#index"
   get '*path', to: 'homepage#index', constraints: ->(request) do

@@ -4,6 +4,8 @@ import Forum from "../components/Forum";
 import Welcome from "../components/Welcome";
 import Login from "../components/Login";
 import Signup from "../components/Signup";
+import Settings from "../components/Settings/Settings";
+import Profile from "../components/Settings/Profile";
 
 /** Routes of our website. When adding a new route, please append here. */
 export default function RouteIndex() {
@@ -15,6 +17,9 @@ export default function RouteIndex() {
           <Route path="/forum" element={<Forum />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/settings" element={<Settings />}>
+            <Route path="profile" element={<Profile />} />
+          </Route>
         </Routes>
       </Router>
     </div>

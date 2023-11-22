@@ -20,6 +20,30 @@ class UserController < ApplicationController
     token
   end
 
+  def decode_jwt(token)
+    jwt_secret = 'NOTASECRET'
+    begin
+      # Decode the token with your secret
+      decoded_token = JWT.decode token, jwt_secret, true, { algorithm: 'HS256' }
+
+      # The first index of the decoded array contains the payload
+      payload = decoded_token[0]
+
+      # You can now access the payload data, for example:
+      user_id = payload['data']['id']
+      return user_id
+    rescue JWT::DecodeError => e
+      puts "Decode error: #{e.message}"
+      nil
+    rescue JWT::ExpiredSignature
+      puts "Token has expired"
+      nil
+    rescue JWT::ImmatureSignature
+      puts "Token is not yet valid"
+      nil
+    end
+  end
+
   def login
     user = User.find_by(username: user_params[:username])
 
@@ -41,10 +65,23 @@ class UserController < ApplicationController
     end
   end
 
+  def update
+    authorization_token = request.headers['Authorization'].split(' ').last
+    id = decode_jwt(authorization_token)
+
+    user = User.find_by(id: id)
+
+    if user.update(user_params)
+      render json: { status: "User updated successfully", user: user }, status: :ok
+    else
+      render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def user_params
-    params.require(:user).permit(:username, :password)
+    params.require(:user).permit(:username, :password, :bio, :profile_pic)
   end
 
 end

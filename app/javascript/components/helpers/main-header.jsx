@@ -4,6 +4,14 @@ import "@/app/globals.css";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../AuthProvider";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 /** Created a Header Skeleton to that we can use in every page.  */
 export function MainHeader() {
@@ -22,12 +30,32 @@ export function MainHeader() {
           <MainNav />
         </div>
         <div className="flex flex-auto justify-end items-center w-1/5 pr-20">
-          <Link to="/login">
-            <Avatar className="h-12 w-12">
-              <AvatarImage src="https://i.pinimg.com/originals/09/da/92/09da926c2b94d95008a9e3b2f60bfdd3.png" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-          </Link>
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Link to="/login">
+                <Avatar className="h-10 w-10 border-2">
+                  <AvatarImage src="https://i.pinimg.com/originals/09/da/92/09da926c2b94d95008a9e3b2f60bfdd3.png" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              </Link>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <a href="/settings/profile"> Settings </a>
+              </DropdownMenuItem>
+              <DropdownMenuItem href="/settings/profile">
+                Profile
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <a href="/settings/posts">My Posts</a>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <a href="/settings/battles">My Battles</a>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     );

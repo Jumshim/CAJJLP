@@ -1,7 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 import React, { useEffect } from "react";
 import { useState } from "react";
-
 import { createContext } from "react";
 
 /** Establishes an Authorization context with the fields token, login, and logout

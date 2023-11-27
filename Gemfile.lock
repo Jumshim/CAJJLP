@@ -105,7 +105,6 @@ GEM
       ruby2_keywords
     error_highlight (0.5.1)
     erubi (1.12.0)
-    foreman (0.87.2)
     globalid (1.2.1)
       activesupport (>= 6.1)
     i18n (1.14.1)
@@ -267,7 +266,6 @@ DEPENDENCIES
   capybara
   debug
   error_highlight (>= 0.4.0)
-  foreman
   jbuilder
   jsbundling-rails
   json
@@ -285,7 +283,7 @@ DEPENDENCIES
   web-console
 
 RUBY VERSION
-   ruby 3.2.2p53
+   ruby 3.1.0p0
 
 BUNDLED WITH
    2.4.22

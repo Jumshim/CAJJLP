@@ -32,12 +32,10 @@ export function MainHeader() {
         <div className="flex flex-auto justify-end items-center w-1/5 pr-20">
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <Link to="/login">
-                <Avatar className="h-10 w-10 border-2">
-                  <AvatarImage src="https://i.pinimg.com/originals/09/da/92/09da926c2b94d95008a9e3b2f60bfdd3.png" />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-              </Link>
+              <Avatar className="h-10 w-10 border-2">
+                <AvatarImage src="https://i.pinimg.com/originals/09/da/92/09da926c2b94d95008a9e3b2f60bfdd3.png" />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuLabel>My Account</DropdownMenuLabel>

@@ -16,6 +16,20 @@ class BattlesController < ApplicationController
     render json: battles.as_json(include: {user: { only: :username}})
   end
 
+  def destroy
+    battle = current_user.battles.find_by(id: params[:id])
+    if battle
+      if battle.destroy
+        render json: { status: 'Battle deleted successfully' }, status: :ok
+      else
+        # If there's an error during the destroy process (e.g., due to callbacks)
+        render json: { errors: battle.errors.full_messages }, status: :unprocessable_entity
+      end
+    else
+      # If the battle with the given id is not found
+      render json: { error: 'Battle not found' }, status: :not_found
+    end
+  end
   private
 
   def battle_params

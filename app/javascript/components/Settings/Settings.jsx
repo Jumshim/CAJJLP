@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { MainHeader } from "../helpers/main-header";
 import { Separator } from "../ui/separator";
 import SidebarNav from "./sidebar-nav";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../AuthProvider";
 
 const sidebarNavItems = [
   {
@@ -22,9 +24,16 @@ const sidebarNavItems = [
 /** Side Column having: Public Profile, Account, Posts, Battles */
 
 export default function Settings({ children }) {
+  const { token } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/forum");
+    }
+  }, [token]);
   return (
     <div>
-      {console.log(`children: ${children}`)}
       <MainHeader />
       <div className="hidden space-y-6 p-10 pb-16 md:block">
         <div className="space-y-0.5">

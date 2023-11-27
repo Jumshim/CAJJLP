@@ -123,7 +123,7 @@ export function ProfileForm() {
       });
   }
   return (
-    <Form {...form}>
+    <Form {...form} className="h-full">
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
@@ -193,9 +193,40 @@ export function ProfileForm() {
   );
 }
 
+export function DeleteProfile() {
+  const { token, logout } = useContext(AuthContext);
+  function onClick() {
+    fetch("/user", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error in deleting user");
+        }
+        return response.json();
+      })
+      .then(() => {
+        logout();
+        navigate("/");
+      });
+  }
+
+  return (
+    <div>
+      <Button onClick={onClick} variant="destructive">
+        Delete Profile
+      </Button>
+    </div>
+  );
+}
+
 export default function Profile() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 h-full">
       <div>
         <h3 className="text-lg font-medium">Profile</h3>
         <p className="text-sm text-muted-foreground">
@@ -204,6 +235,7 @@ export default function Profile() {
       </div>
       <Separator />
       <ProfileForm />
+      <DeleteProfile />
       <Toaster />
     </div>
   );

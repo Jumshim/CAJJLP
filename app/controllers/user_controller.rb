@@ -92,6 +92,22 @@ class UserController < ApplicationController
     return User.find_by(id: id)
   end
 
+ def destroy
+    authorization_token = request.headers['Authorization'].split(' ').last
+    id = decode_jwt(authorization_token)
+    
+    # Assuming `decode_jwt` method returns the user's ID after decoding the token
+    user = User.find_by(id: id)
+
+    if user
+      # This will destroy the user and all associated posts if the user `has_many :posts` and `dependent: :destroy` is set in the User model.
+      user.destroy
+      render json: { message: 'User and associated posts successfully destroyed.' }, status: :ok
+    else
+      render json: { error: 'User not found.' }, status: :not_found
+    end
+  end
+
   private
 
   def user_params

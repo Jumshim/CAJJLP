@@ -13,7 +13,7 @@ export function MainNav() {
         Battle
       </Link>
       <Link
-        to="/battle"
+        to="/forum"
         className="text-base font-medium transition-colors hover:text-primary"
       >
         Forum

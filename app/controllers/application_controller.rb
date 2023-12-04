@@ -18,6 +18,7 @@ class ApplicationController < ActionController::Base
   def find_user_from_token
     token = request.headers['Authorization'].to_s.split(' ').last
     user_id = decode_jwt(token)
+    puts user_id
     User.find_by(id: user_id) if user_id
   end
 

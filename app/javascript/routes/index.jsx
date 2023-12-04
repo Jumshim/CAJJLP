@@ -7,6 +7,7 @@ import Signup from "../components/Signup";
 import Settings from "../components/Settings/Settings";
 import Profile from "../components/Settings/Profile";
 import Battle from "../components/Battle";
+import BattleSetting from "../components/Settings/BattleSettings";
 
 /** Routes of our website. When adding a new route, please append here. */
 export default function RouteIndex() {
@@ -21,6 +22,7 @@ export default function RouteIndex() {
           <Route path="/battle" element={<Battle />} />
           <Route path="/settings" element={<Settings />}>
             <Route path="profile" element={<Profile />} />
+            <Route path="battles" element={<BattleSetting />} />
           </Route>
         </Routes>
       </Router>

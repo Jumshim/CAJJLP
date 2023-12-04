@@ -13,7 +13,9 @@ Rails.application.routes.draw do
   delete '/user', to: 'user#destroy'
   # Defines the root path route ("/")
   get '/battles', to: 'battles#index'
+  get '/user_battles', to: 'battles#user_battles'
   post '/battles/create', to: 'battles#create'
+  delete '/battles/:id', to: 'battles#destroy'
   # root "posts#index"
   get '*path', to: 'homepage#index', constraints: ->(request) do
 

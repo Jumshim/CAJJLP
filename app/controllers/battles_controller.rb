@@ -12,8 +12,13 @@ class BattlesController < ApplicationController
   end
 
   def index
-    battles = Battle.includes(:user).all
+    battles = Battle.all
     render json: battles.as_json(include: {user: { only: :username}})
+  end
+
+  def user_battles
+    battles = current_user.battles
+    render json: battles.as_json
   end
 
   def destroy

@@ -1,47 +1,42 @@
 class PostController < ApplicationController
-    def new
-        # important to ensure @user in _form is not nil
-        @user = User.find(params[:user_id])
-        @post = @user.posts.new
-    end
+    skip_before_action :verify_authenticity_token
+    before_action :authenticate_user!, except: [:index, :show]
   
     def create
-        @user = User.find(params[:user_id])
-        @post = @user.posts.build(post_params)
-        if @post.save
-          redirect_to root_path
+        post = current_user.posts.new(post_params)
+        if post.save
+            render json: { status: 'Post created successfully', post: post }, status: :created
         else
-          render :new, status: :unprocessable_entity
+            render json: { errors: post.errors.full_messages }, status: :unprocessable_entity
         end
     end
-  
-  
-    def edit
-        @user = User.find(params[:user_id])
-        @post = @user.posts.find(params[:id])
+
+    def index 
+        posts = Post.all
+        render json: posts.as_json(include: {user: { only: :username}})
     end
+
+    def user_posts
+        posts = current_user.posts
+        render json: posts.as_json
+    end
+
     
-    def update
-        @user = User.find(params[:user_id])
-        @post = @user.posts.find(params[:id])
-      
-        if @post.update(post_params)
-            redirect_to root_path
-        else
-            render :edit, status: :unprocessable_entity
-        end
-    end
-  
     def destroy
-        @user = User.find(params[:user_id])
-        @post = @user.posts.find(params[:id])
-        @post.destroy
-      
-        redirect_to root_path, status: :see_other
-    end
+        post = current_user.posts.find_by(id: params[:id])
+        if post
+          if post.destroy
+            render json: { status: 'Post deleted successfully' }, status: :ok
+          else
+            render json: { errors: post.errors.full_messages }, status: :unprocessable_entity
+          end
+        else
+          render json: { error: 'Post not found' }, status: :not_found
+        end
+    end 
       
     private
-        def post_params
-            params.require(:post).permit(:body, :title)
-        end
+    def post_params
+        params.require(:post).permit(:title, :body)
+    end
 end

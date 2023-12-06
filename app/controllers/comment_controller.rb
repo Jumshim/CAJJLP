@@ -1,42 +1,58 @@
 class CommentController < ApplicationController
-    skip_before_action :verify_authenticity_token
-    before_action :authenticate_user!, except: [:index, :show]
+  #skip authenticity token verification for all actions 
+  skip_before_action :verify_authenticity_token
+
+  #use user authentication for actions except index and show (create, destroy)
+  before_action :authenticate_user!, except: [:index, :show]
   
-    def create
-        comment = current_user.comments.new(comment_params)
-        if comment.save
-            render json: { status: 'Comment created successfully', comment: comment }, status: :created
-        else
-            render json: { errors: comment.errors.full_messages }, status: :unprocessable_entity
-        end
-    end
+  #create a new comment 
+  def create
+    #build a new comment associated with the current user
+    comment = current_user.comments.new(comment_params)
 
-    def index 
-        comments = Comment.all
-        render json: comments.as_json(include: {user: { only: :username}})
+    #handle comment creation (success vs failure)
+    if comment.save
+      render json: { status: 'Comment created successfully', comment: comment }, status: :created
+    else
+      render json: { errors: comment.errors.full_messages }, status: :unprocessable_entity
     end
+  end
 
-    def user_comments
-        comments = current_user.comments
-        render json: comments.as_json
-    end
+  #retrieve all comments
+  def index 
+    comments = Comment.all
+    #render comments as JSON, including the username of the associated user 
+    render json: comments.as_json(include: {user: { only: :username}})
+  end
+
+  #retrieve comments of the current user 
+  def user_comments
+    comments = current_user.comments
+    #render user comments as JSON 
+    render json: comments.as_json
+  end
 
     
-    def destroy
-        comment = current_user.comments.find_by(id: params[:id])
-        if comment
-          if comment.destroy
-            render json: { status: 'Comment deleted successfully' }, status: :ok
-          else
-            render json: { errors: comment.errors.full_messages }, status: :unprocessable_entity
-          end
-        else
-          render json: { error: 'Comment not found' }, status: :not_found
-        end
-    end 
-      
-    private
-    def comment_params
-        params.require(:comment).permit(:body)
+  def destroy
+    #find the comment that belongs to the current user by ID
+    comment = current_user.comments.find_by(id: params[:id])
+
+    if comment
+      #handle success vs failure for destroying the comment
+      if comment.destroy
+        render json: { status: 'Comment deleted successfully' }, status: :ok
+      else
+        render json: { errors: comment.errors.full_messages }, status: :unprocessable_entity
+      end
+    #handle the case where the comment isn't found 
+    else
+      render json: { error: 'Comment not found' }, status: :not_found
     end
+  end 
+      
+  private
+  def comment_params
+    #params for comment creation
+    params.require(:comment).permit(:body)
+  end
 end

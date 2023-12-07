@@ -1,4 +1,5 @@
 class PostController < ApplicationController
+<<<<<<< HEAD
   #skip authenticity token verification for all actions 
   skip_before_action :verify_authenticity_token
 
@@ -15,6 +16,39 @@ class PostController < ApplicationController
       render json: { status: 'Post created successfully', post: post }, status: :created
     else
       render json: { errors: post.errors.full_messages }, status: :unprocessable_entity
+=======
+    skip_before_action :verify_authenticity_token
+    before_action :authenticate_request!, except: [:index, :index_by_forum]
+  
+    def create
+        forum = Forum.find_by(title: params[:forum])
+        post = current_user.posts.new(post_params)
+        post.forum = forum
+        if post.save
+            render json: { status: 'Post created successfully', post: post }, status: :created
+        else
+            render json: { errors: post.errors.full_messages }, status: :unprocessable_entity
+        end
+    end
+
+    def index 
+        post = Post.find_by(id: params[:id])
+        if post
+          render json: post.as_json(include: {user: { only: :username}})
+        else
+          render json: { error: 'Post not found'}, status: :not_found
+        end
+    end
+
+    def index_by_forum
+      forum = Forum.find_by(title: params[:tag])
+      if forum
+        posts = forum.posts
+        render json: posts.as_json(include: { user: { only: :username}})
+      else
+        render json: { error: 'Posts or Forum not found'}, status: :not_found
+      end
+>>>>>>> 2c5c884 (done with forum and post and comments)
     end
   end
 

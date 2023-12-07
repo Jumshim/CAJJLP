@@ -17,8 +17,17 @@ Rails.application.routes.draw do
   post '/battles/create', to: 'battles#create'
   post '/battles/:id', to: 'battles#update' #route for updating battles 
   delete '/battles/:id', to: 'battles#destroy'
+
+  # posts
+  get '/posts/:tag', to: 'post#index_by_forum'
+  get '/posts/:tag/:id', to: 'post#index'
+  post '/posts', to: 'post#create'
   # root "posts#index"
   get '*path', to: 'homepage#index', constraints: ->(request) do
+
+  # comments
+  post '/comment', to: 'comment#create'
+  get '/comment/:id', to: 'comment#index'
 
     !request.xhr? && request.format.html?
   end

@@ -19,16 +19,10 @@ export function MainNav() {
         Forum
       </Link>
       <Link
-        to="/news"
+        to="/forum/news"
         className="text-base font-medium transition-colors hover:text-primary"
       >
         News
-      </Link>
-      <Link
-        to="/pokedex"
-        className="text-base font-medium transition-colors hover:text-primary"
-      >
-        Pokedex
       </Link>
     </nav>
   );

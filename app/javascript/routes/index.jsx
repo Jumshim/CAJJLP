@@ -8,6 +8,8 @@ import Settings from "../components/Settings/Settings";
 import Profile from "../components/Settings/Profile";
 import Battle from "../components/Battle";
 import BattleSetting from "../components/Settings/BattleSettings";
+import ForumPage from "../components/ForumPage";
+import Post from "../components/Post";
 
 /** Routes of our website. When adding a new route, please append here. */
 export default function RouteIndex() {
@@ -17,6 +19,8 @@ export default function RouteIndex() {
         <Routes>
           <Route path="/" element={<Welcome />} />
           <Route path="/forum" element={<Forum />} />
+          <Route path="/forum/:tag" element={<ForumPage />} />
+          <Route path="/forum/:tag/:post_id" element={<Post />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/battle" element={<Battle />} />

@@ -1,4 +1,5 @@
 class CommentController < ApplicationController
+<<<<<<< HEAD
   #skip authenticity token verification for all actions 
   skip_before_action :verify_authenticity_token
 
@@ -15,6 +16,31 @@ class CommentController < ApplicationController
       render json: { status: 'Comment created successfully', comment: comment }, status: :created
     else
       render json: { errors: comment.errors.full_messages }, status: :unprocessable_entity
+=======
+    skip_before_action :verify_authenticity_token
+    before_action :authenticate_request!, except: [:index]
+  
+    def create
+        comment = current_user.comments.new(comment_params)
+        post = Post.find_by(id: params[:post_id])
+        comment.post = post
+        if comment.save
+            render json: { status: 'Comment created successfully', comment: comment }, status: :created
+        else
+            render json: { errors: comment.errors.full_messages }, status: :unprocessable_entity
+        end
+    end
+
+    def index 
+        post = Post.find_by(id: params[:id])
+        puts post
+        if post.save
+          comments = post.comments.all
+          render json: comments.as_json(include: {user: { only: :username}}), status: :ok
+        else
+          render json: {errors: post.errors.full_messages}, status: :unprocessable_entity
+        end
+>>>>>>> 2c5c884 (done with forum and post and comments)
     end
   end
 

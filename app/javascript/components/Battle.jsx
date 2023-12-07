@@ -4,6 +4,7 @@ import { MainHeader } from "./helpers/main-header";
 import { Separator } from "./ui/separator";
 import { Input } from "./ui/input";
 import { CalendarIcon } from "@radix-ui/react-icons";
+import moment from "moment";
 
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -98,27 +99,27 @@ export function Battles() {
   );
 }
 
-//Function to update battles 
+//Function to update battles
 export function UpdateBattles() {
   //used for things related to authentication
   const { token } = useContext(AuthContext);
-  //notification system 
+  //notification system
   const { toast } = useToast();
 
-  //values for updating a battle 
+  //values for updating a battle
   const defaultValues = {
-    title: '',
-    description: '',
-    username: '',
-    battle_type: '',
-    date: '',
+    title: "",
+    description: "",
+    username: "",
+    battle_type: "",
+    date: "",
   };
 
   // Initialize the form using react-hook-form
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues,
-    mode: 'onChange',
+    mode: "onChange",
   });
 
   // Fetch existing battle data
@@ -126,22 +127,22 @@ export function UpdateBattles() {
     fetch(`/battles`)
       .then((response) => {
         if (!response.ok) {
-          console.log('ERROR');
+          console.log("ERROR");
           return;
         }
         return response.json();
       })
       .then((data) => {
         // Set the default values in the form with existing battle data
-        form.setValue('title', data.title);
-        form.setValue('description', data.description);
-        form.setValue('username', data.username);
-        form.setValue('battle_type', data.battle_type);
-        form.setValue('date', data.date);
+        form.setValue("title", data.title);
+        form.setValue("description", data.description);
+        form.setValue("username", data.username);
+        form.setValue("battle_type", data.battle_type);
+        form.setValue("date", data.date);
       });
   }, [battleId, form]);
 
-  //update the values once the form is submitted 
+  //update the values once the form is submitted
   function onSubmit() {
     const requestBody = {
       battle: {
@@ -152,7 +153,7 @@ export function UpdateBattles() {
         date: values.date,
       },
     };
-  
+
     // Send a request to update the battle
     fetch(`/battles/update}`, {
       method: "POST",
@@ -166,15 +167,17 @@ export function UpdateBattles() {
         if (!response.ok) {
           return;
         }
-        console.log('UPDATING!');
+        console.log("UPDATING!");
         return response.json();
       })
       .then((data) => {
         toast({
-          title: 'Battle updated successfully',
+          title: "Battle updated successfully",
           description: (
             <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-              <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+              <code className="text-white">
+                {JSON.stringify(data, null, 2)}
+              </code>
             </pre>
           ),
         });
@@ -200,7 +203,6 @@ export function UpdateBattles() {
       </form>
     </Form>
   );
-
 }
 
 const formSchema = z.object({

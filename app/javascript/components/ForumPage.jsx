@@ -18,7 +18,7 @@ import { Textarea } from "./ui/textarea";
 
 export function PostCard({ title, updatedAt, username, id, forum }) {
   return (
-    <Link to={`${id}`}>
+    <===={`${id}`}>
       <Card className="flex flex-row justify-between">
         <div className="w-8/10">
           <CardHeader>

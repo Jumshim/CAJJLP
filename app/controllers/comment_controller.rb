@@ -1,22 +1,4 @@
 class CommentController < ApplicationController
-<<<<<<< HEAD
-  #skip authenticity token verification for all actions 
-  skip_before_action :verify_authenticity_token
-
-  #use user authentication for actions except index and show (create, destroy)
-  before_action :authenticate_user!, except: [:index, :show]
-  
-  #create a new comment 
-  def create
-    #build a new comment associated with the current user
-    comment = current_user.comments.new(comment_params)
-
-    #handle comment creation (success vs failure)
-    if comment.save
-      render json: { status: 'Comment created successfully', comment: comment }, status: :created
-    else
-      render json: { errors: comment.errors.full_messages }, status: :unprocessable_entity
-=======
     skip_before_action :verify_authenticity_token
     before_action :authenticate_request!, except: [:index]
   
@@ -40,7 +22,6 @@ class CommentController < ApplicationController
         else
           render json: {errors: post.errors.full_messages}, status: :unprocessable_entity
         end
->>>>>>> 2c5c884 (done with forum and post and comments)
     end
   end
 

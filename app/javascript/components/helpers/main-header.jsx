@@ -23,7 +23,7 @@ export function MainHeader() {
         <div className="flex flex-auto flex-row space-x-14 w-4/5">
           <Link
             to="/forum"
-            className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl text-violet-500"
+            className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5x text-violet-400"
           >
             PokePortal
           </Link>

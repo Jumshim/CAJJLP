@@ -52,6 +52,8 @@ export function BattleCard({
         <p>{date}</p>
       </CardContent>
       <CardFooter>
+        {/* Button for updating a battle */}
+        {/* <Button onClick={() => onUpdateClick && onUpdateClick()}>Update</Button> */}
         <p>Please wait for connections to be implemented</p>
       </CardFooter>
     </Card>
@@ -94,6 +96,111 @@ export function Battles() {
       ))}
     </React.Fragment>
   );
+}
+
+//Function to update battles 
+export function UpdateBattles() {
+  //used for things related to authentication
+  const { token } = useContext(AuthContext);
+  //notification system 
+  const { toast } = useToast();
+
+  //values for updating a battle 
+  const defaultValues = {
+    title: '',
+    description: '',
+    username: '',
+    battle_type: '',
+    date: '',
+  };
+
+  // Initialize the form using react-hook-form
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues,
+    mode: 'onChange',
+  });
+
+  // Fetch existing battle data
+  useEffect(() => {
+    fetch(`/battles`)
+      .then((response) => {
+        if (!response.ok) {
+          console.log('ERROR');
+          return;
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // Set the default values in the form with existing battle data
+        form.setValue('title', data.title);
+        form.setValue('description', data.description);
+        form.setValue('username', data.username);
+        form.setValue('battle_type', data.battle_type);
+        form.setValue('date', data.date);
+      });
+  }, [battleId, form]);
+
+  //update the values once the form is submitted 
+  function onSubmit() {
+    const requestBody = {
+      battle: {
+        title: values.title,
+        description: values.description,
+        username: values.username,
+        battle_type: values.battle_type,
+        date: values.date,
+      },
+    };
+  
+    // Send a request to update the battle
+    fetch(`/battles/update}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(requestBody),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return;
+        }
+        console.log('UPDATING!');
+        return response.json();
+      })
+      .then((data) => {
+        toast({
+          title: 'Battle updated successfully',
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+            </pre>
+          ),
+        });
+      });
+  }
+
+  // Render the form with input fields and a submit button
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="title"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Title</FormLabel>
+              <Input placeholder={defaultValues.title} {...field} />
+            </FormItem>
+          )}
+        />
+        {/* Add other form fields here based on your requirements */}
+        <Button type="submit">Update Battle</Button>
+      </form>
+    </Form>
+  );
+
 }
 
 const formSchema = z.object({

@@ -51,6 +51,43 @@ export function BattleSettingCard({ battle, token }) {
       });
   }
 
+  //updating the battle function 
+  function updateBattle(values) {
+    const requestBody = {
+      battle: {
+        title: "TEST",
+        description: "TEST",
+        battle_type: "DOUBLES",
+        date: "12-31-2023",
+      },
+    };
+
+    fetch(`/battles/${battle.id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(requestBody),
+    })
+      .then((response) => {
+        //handling errors in updating the battle 
+        if (!response.ok) {
+          throw new Error("Error in updating battle");
+        }
+        return response.json();
+    })
+    .then((data) => {
+      //set the battle with the new battle data 
+      setBattles(data);
+      console.log("Battle successfully updated"); 
+    })
+    .catch((error) => {
+      // Handle errors during the update process
+      console.error("Error updating battle:", error.message);
+    });
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -66,6 +103,9 @@ export function BattleSettingCard({ battle, token }) {
       <CardFooter>
         <Button onClick={deleteBattle} variant="destructive">
           Delete Battle
+        </Button>
+        <Button onClick={updateBattle} >
+          Update Battle
         </Button>
       </CardFooter>
     </Card>

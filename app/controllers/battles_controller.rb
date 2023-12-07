@@ -11,6 +11,19 @@ class BattlesController < ApplicationController
     end
   end
 
+  #update the battles
+  def update
+    #Find the battle based on the request 
+    battle = Battle.find_by(id: params[:id])
+
+    #update the battle with the provided params (success vs failure cases) 
+    if battle.update(battle_params)
+      render json: { status: "Battle updated successfully", battle: battle }, status: :ok
+    else
+      render json: { errors: battle.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
   def index
     battles = Battle.all
     render json: battles.as_json(include: {user: { only: :username}})
@@ -39,5 +52,6 @@ class BattlesController < ApplicationController
 
   def battle_params
     params.require(:battle).permit(:title, :description, :battle_type, :date)
+    #params.permit(:title, :description, :battle_type, :date)
   end
 end

@@ -1,22 +1,4 @@
 class PostController < ApplicationController
-<<<<<<< HEAD
-  #skip authenticity token verification for all actions 
-  skip_before_action :verify_authenticity_token
-
-  #use user authentication for actions except index and show (create, destroy)
-  before_action :authenticate_user!, except: [:index, :show]
-  
-  #create a new post 
-  def create
-    #build a new post associated with the current user 
-    post = current_user.posts.new(post_params)
-
-    #handle post creation (success vs failure)
-    if post.save
-      render json: { status: 'Post created successfully', post: post }, status: :created
-    else
-      render json: { errors: post.errors.full_messages }, status: :unprocessable_entity
-=======
     skip_before_action :verify_authenticity_token
     before_action :authenticate_request!, except: [:index, :index_by_forum]
   
@@ -48,16 +30,7 @@ class PostController < ApplicationController
       else
         render json: { error: 'Posts or Forum not found'}, status: :not_found
       end
->>>>>>> 2c5c884 (done with forum and post and comments)
     end
-  end
-
-  #retrieve all posts 
-  def index 
-    posts = Post.all
-    #render posts as JSON, including the username of the associated user 
-    render json: posts.as_json(include: {user: { only: :username}})
-  end
 
   #retrieve posts of the current user 
   def user_posts
@@ -85,8 +58,10 @@ class PostController < ApplicationController
   end 
       
   private
+
   def post_params
     #params for post creation
     params.require(:post).permit(:title, :body)
   end
+
 end

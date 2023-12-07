@@ -4,6 +4,7 @@ class CommentController < ApplicationController
   
     def create
         comment = current_user.comments.new(comment_params)
+        puts params
         post = Post.find_by(id: params[:post_id])
         comment.post = post
         if comment.save
@@ -23,14 +24,6 @@ class CommentController < ApplicationController
           render json: {errors: post.errors.full_messages}, status: :unprocessable_entity
         end
     end
-  end
-
-  #retrieve all comments
-  def index 
-    comments = Comment.all
-    #render comments as JSON, including the username of the associated user 
-    render json: comments.as_json(include: {user: { only: :username}})
-  end
 
   #retrieve comments of the current user 
   def user_comments

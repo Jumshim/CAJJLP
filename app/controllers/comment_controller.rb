@@ -1,17 +1,21 @@
 class CommentController < ApplicationController
     skip_before_action :verify_authenticity_token
-    before_action :authenticate_request!, except: [:index]
+    before_action :authenticate_request!, except: [:index, :create]
   
     def create
+      if not current_user
+        anonymous_user = User.find_by(username: 'Anonymous')
+        comment = anonymous_user.comments.new(comment_params)
+      else
         comment = current_user.comments.new(comment_params)
-        puts params
-        post = Post.find_by(id: params[:post_id])
-        comment.post = post
-        if comment.save
-            render json: { status: 'Comment created successfully', comment: comment }, status: :created
-        else
-            render json: { errors: comment.errors.full_messages }, status: :unprocessable_entity
-        end
+      end
+      post = Post.find_by(id: params[:post_id])
+      comment.post = post
+      if comment.save
+          render json: { status: 'Comment created successfully', comment: comment }, status: :created
+      else
+          render json: { errors: comment.errors.full_messages }, status: :unprocessable_entity
+      end
     end
 
     def index 

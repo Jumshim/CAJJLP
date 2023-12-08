@@ -28,6 +28,11 @@ User.create(
   bio: 'Cerulean City Gym Leader and Water Pokemon Expert',
 )
 
+User.create(
+  username: 'Anonymous',
+  password_digest: 'QOPHJCAKNCKQSNCIQSPMZXKCMQPSOJDOPQKSMZL<:MCKXPVIJPOKPOK!2',
+  bio: 'N/A'
+)
 
 Forum.create(title: "news", description: "Stay updated and discuss about the newest announcements from Pokemon.")
 Forum.create(title: "competitive", description: "Discuss recent VGC / Smogon updates, tournaments, and all things Competitive Pokemon.")

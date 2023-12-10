@@ -36,7 +36,7 @@ class PostController < ApplicationController
   def user_posts
     posts = current_user.posts
     #render user posts as JSON 
-    render json: posts.as_json
+    render json: posts.as_json(include: {user: {only: :username}})
   end
 
     

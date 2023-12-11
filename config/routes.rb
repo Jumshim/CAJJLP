@@ -33,4 +33,11 @@ Rails.application.routes.draw do
   end
 
   resources :posts
+
+  #connections
+  get '/connection', to: 'connection#index'
+  post '/connection/create', to: 'connection#create'
+  post '/connection/:id', to: 'connection#update'
+  delete '/connection/:id', to: 'connection#destroy'
+
 end

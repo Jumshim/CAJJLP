@@ -4,6 +4,6 @@ class User < ApplicationRecord
 
   has_many :posts, dependent: :destroy
   has_many :comments
-#   has_many :connections,
+  has_many :connections,
   has_many :battles, dependent: :destroy
 end

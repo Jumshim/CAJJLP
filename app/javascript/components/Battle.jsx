@@ -53,9 +53,8 @@ export function BattleCard({
         <p>{date}</p>
       </CardContent>
       <CardFooter>
-        {/* Button for updating a battle */}
-        {/* <Button onClick={() => onUpdateClick && onUpdateClick()}>Update</Button> */}
-        <p>Please wait for connections to be implemented</p>
+        {/* <p>Please wait for connections to be implemented</p> */}
+        <Button onClick={handleButtonClick}>Join Battle</Button>
       </CardFooter>
     </Card>
   );

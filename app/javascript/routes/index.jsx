@@ -10,6 +10,9 @@ import Battle from "../components/Battle";
 import BattleSetting from "../components/Settings/BattleSettings";
 import ForumPage from "../components/ForumPage";
 import Post from "../components/Post";
+import PostSetting, {
+  PostSettingCard,
+} from "../components/Settings/PostSettings";
 
 /** Routes of our website. When adding a new route, please append here. */
 export default function RouteIndex() {
@@ -26,6 +29,7 @@ export default function RouteIndex() {
           <Route path="/battle" element={<Battle />} />
           <Route path="/settings" element={<Settings />}>
             <Route path="profile" element={<Profile />} />
+            <Route path="posts" element={<PostSetting />} />
             <Route path="battles" element={<BattleSetting />} />
           </Route>
         </Routes>

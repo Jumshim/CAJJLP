@@ -16,7 +16,7 @@ import { useToast } from "./ui/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Textarea } from "./ui/textarea";
 
-export function PostCard({ title, updatedAt, username, id, forum }) {
+export function PostCard({ title, updatedAt, username, id }) {
   return (
     <Link to={`${id}`}>
       <Card className="flex flex-row justify-between">
@@ -121,7 +121,6 @@ export function PostForm({ forum }) {
         if (!response.ok) {
           return;
         }
-        console.log("UPDATING!");
         return response.json();
       })
       .then((data) => {

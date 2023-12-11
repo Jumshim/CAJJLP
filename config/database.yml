@@ -18,6 +18,9 @@ default: &default
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: <%= ENV.fetch("PGHOST") { "db" } %>
+  password: postgres
+  username: postgres
 
 development:
   <<: *default
@@ -79,6 +82,12 @@ test:
 #
 production:
   <<: *default
-  database: poke_portal_production
-  username: poke_portal
-  password: <%= ENV["POKE_PORTAL_DATABASE_PASSWORD"] %>
+  database: <%= ENV['RDS_DB_NAME'] %>
+  host: <%= ENV['RDS_HOSTNAME'] %>
+  password: <%= ENV['RDS_PASSWORD'] %>
+  port: <%= ENV['RDS_PORT'] %>
+  username: <%= ENV['RDS_USERNAME'] %>
+#  database: poke_portal_production
+#  username: poke_portal
+#  password: <%= ENV["POKE_PORTAL_DATABASE_PASSWORD"] %>
+

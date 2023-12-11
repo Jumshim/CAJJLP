@@ -19,9 +19,11 @@ Rails.application.routes.draw do
   delete '/battles/:id', to: 'battles#destroy'
 
   # posts
+  get '/user_posts', to: 'post#user_posts'
   get '/posts/:tag', to: 'post#index_by_forum'
   get '/posts/:tag/:id', to: 'post#index'
   post '/posts', to: 'post#create'
+  delete '/posts/:id', to: 'posts#destroy'
   # root "posts#index"
   get '*path', to: 'homepage#index', constraints: ->(request) do
 

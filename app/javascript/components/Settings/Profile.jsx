@@ -22,6 +22,7 @@ import { Avatar, AvatarImage } from "../ui/avatar";
 import { toast } from "../ui/use-toast";
 import { AuthContext } from "../AuthProvider";
 import { Toaster } from "../ui/toaster";
+import { ScrollArea } from "../ui/scroll-area";
 
 const profileFormSchema = z.object({
   username: z.string().min(2, {
@@ -226,7 +227,7 @@ export function DeleteProfile() {
 
 export default function Profile() {
   return (
-    <div className="space-y-6 h-full">
+    <ScrollArea className="space-y-6 h-full">
       <div>
         <h3 className="text-lg font-medium">Profile</h3>
         <p className="text-sm text-muted-foreground">
@@ -237,6 +238,6 @@ export default function Profile() {
       <ProfileForm />
       <DeleteProfile />
       <Toaster />
-    </div>
+    </ScrollArea>
   );
 }

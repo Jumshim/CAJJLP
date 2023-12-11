@@ -5,6 +5,7 @@ import { Separator } from "../ui/separator";
 import SidebarNav from "./sidebar-nav";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../AuthProvider";
+import { ScrollArea } from "../ui/scroll-area";
 
 const sidebarNavItems = [
   {
@@ -47,9 +48,9 @@ export default function Settings({ children }) {
           <aside className="-mx-4 lg:w-1/5">
             <SidebarNav items={sidebarNavItems} />
           </aside>
-          <div className="flex-1 lg:max-w-2xl">
+          <ScrollArea className="flex-1 lg:max-w-2xl">
             <Outlet />
-          </div>
+          </ScrollArea>
         </div>
       </div>
     </div>

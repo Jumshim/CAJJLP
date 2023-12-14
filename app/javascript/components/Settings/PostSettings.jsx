@@ -8,63 +8,29 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import moment from "moment";
-
-import Settings from "./Settings";
 import { Textarea } from "../ui/textarea";
-import { Avatar, AvatarImage } from "../ui/avatar";
 import { toast, useToast } from "../ui/use-toast";
 import { AuthContext } from "../AuthProvider";
-import { Toaster } from "../ui/toaster";
 import {
   CardContent,
   CardHeader,
-  CardDescription,
   CardTitle,
   Card,
   CardFooter,
 } from "../ui/card";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
-import { Calendar } from "../ui/calendar";
 import { ScrollArea } from "../ui/scroll-area";
-
-export function UpdatePostPopover({ id, token }) {
-  return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button variant="outline">Update Post</Button>
-      </PopoverTrigger>
-      <PopoverContent>
-        <ScrollArea className="flex max-h-56 flex-col" type="always">
-          <UpdatePostForm id={id} token={token} />
-        </ScrollArea>
-      </PopoverContent>
-    </Popover>
-  );
-}
 
 const formSchema = z.object({
   title: z.string().min(2, {
     message: "Title must be at least 2 characters.",
   }),
-  description: z.string().min(2, {
-    message: "Must create a description",
+  body: z.string().min(10, {
+    message: "Must create a body",
   }),
-  battle_type: z.string().min(2, {
-    message: "Must select a type",
-  }),
-  date: z.date(),
 });
 
-export function UpdateBattleForm({ id, token }) {
+export function UpdatePostForm({ id, token }) {
   const { toast } = useToast();
   const defaultValues = {
     title: "",
@@ -81,16 +47,12 @@ export function UpdateBattleForm({ id, token }) {
 
   function onSubmit(values) {
     const requestBody = {
-      battle: {
-        title: values.title,
-        description: values.description,
-        battle_type: values.battle_type,
-        date: values.date,
-      },
+      title: values.title,
+      body: values.body,
     };
 
-    fetch(`/battles/${id}}`, {
-      method: "POST",
+    fetch(`/posts/${id}}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -105,7 +67,7 @@ export function UpdateBattleForm({ id, token }) {
       })
       .then((data) => {
         toast({
-          title: "Battle updated successfully",
+          title: "Post updated successfully",
           description: (
             <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
               <code className="text-white">
@@ -134,77 +96,33 @@ export function UpdateBattleForm({ id, token }) {
         />
         <FormField
           control={form.control}
-          name="description"
+          name="body"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>Body</FormLabel>
               <FormControl>
-                <Input placeholder={defaultValues.description} {...field} />
+                <Textarea placeholder={defaultValues.body} {...field} />
               </FormControl>
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="battle_type"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Type</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Singles" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="Singles">Singles</SelectItem>
-                  <SelectItem value="Doubles">Doubles</SelectItem>
-                </SelectContent>
-              </Select>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="date"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Date</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "w-[240px] pl-3 text-left font-normal",
-                        !field.value && "text-muted-foreground"
-                      )}
-                    >
-                      {field.value ? (
-                        format(field.value, "PPP")
-                      ) : (
-                        <span>Pick a date</span>
-                      )}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={field.value}
-                    onSelect={field.onChange}
-                    disabled={(date) => date < new Date("1900-01-01")}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-            </FormItem>
-          )}
-        />
-        <Button type="submit">Update Battle</Button>
+        <Button type="submit">Update Post</Button>
       </form>
     </Form>
+  );
+}
+export function UpdatePostPopover({ id, token }) {
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="outline">Update Post</Button>
+      </PopoverTrigger>
+      <PopoverContent>
+        <ScrollArea className="flex max-h-56 flex-col" type="always">
+          <UpdatePostForm id={id} token={token} />
+        </ScrollArea>
+      </PopoverContent>
+    </Popover>
   );
 }
 
@@ -293,7 +211,7 @@ export default function PostSetting() {
           Here are all of your Posts:
         </p>
         {posts.map((post) => {
-          return <PostSettingCard post={post} token={token} />;
+          return <PostSettingCard key={post.id} post={post} token={token} />;
         })}
       </div>
       <Separator />

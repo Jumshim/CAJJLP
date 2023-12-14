@@ -32,6 +32,16 @@ class PostController < ApplicationController
       end
     end
 
+    def update
+      post = Post.find_by(id: params[:id])
+
+      if post.update(post_params)
+        render json: { status: "Post updated successfully", post: post }, status: :ok
+      else
+        render json: { errors: post.errors.full_messages }, status: :unprocessable_entity
+      end
+    end
+
   #retrieve posts of the current user 
   def user_posts
     posts = current_user.posts

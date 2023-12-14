@@ -25,8 +25,8 @@ class BattlesController < ApplicationController
   end
 
   def index
-    battles = Battle.all
-    render json: battles.as_json(include: {user: { only: :username}})
+    battles_without_connections = Battle.left_outer_joins(:connections).where(connections: { id: nil })
+    render json: battles_without_connections.as_json(include: {user: { only: :username}})
   end
 
   def user_battles

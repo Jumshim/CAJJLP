@@ -63,6 +63,6 @@ class ConnectionController < ApplicationController
 
     #define permitted parameters for creating/updating connections
     def connection_params
-        params.require(:connection).permit(:user_id, :battle_id)
+        params.require(:connection).permit(:battle_id)
     end
 end

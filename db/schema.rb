@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_22_084341) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_14_213057) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -39,6 +39,10 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_22_084341) do
     t.integer "type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "battle_id", null: false
+    t.bigint "user_id", null: false
+    t.index ["battle_id"], name: "index_connections_on_battle_id"
+    t.index ["user_id"], name: "index_connections_on_user_id"
   end
 
   create_table "forums", force: :cascade do |t|
@@ -71,6 +75,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_22_084341) do
   add_foreign_key "battles", "users"
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
+  add_foreign_key "connections", "battles"
+  add_foreign_key "connections", "users"
   add_foreign_key "posts", "forums"
   add_foreign_key "posts", "users"
 end

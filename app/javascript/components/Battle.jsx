@@ -34,12 +34,35 @@ import {
 } from "./ui/card";
 
 export function BattleCard({
+  battle_id,
   title,
   description,
   username,
   battle_type,
   date,
+  token,
 }) {
+  function onSubmit(values) {
+    const requestBody = {
+      connection: {
+        battle_id: battle_id,
+      },
+    };
+
+    fetch("/connection/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(requestBody),
+    }).then((response) => {
+      if (!response.ok) {
+        return;
+      }
+      return response.json();
+    });
+  }
   return (
     <Card>
       <CardHeader>
@@ -54,13 +77,13 @@ export function BattleCard({
       </CardContent>
       <CardFooter>
         {/* <p>Please wait for connections to be implemented</p> */}
-        <Button onClick={handleButtonClick}>Join Battle</Button>
+        <Button onClick={onSubmit}>Join Battle</Button>
       </CardFooter>
     </Card>
   );
 }
 
-export function Battles() {
+export function Battles({ token }) {
   const [battles, setBattles] = useState([]);
 
   useEffect(() => {
@@ -86,11 +109,13 @@ export function Battles() {
       {battles?.map((battle) => (
         <div key={battle.id} className="col-span-1">
           <BattleCard
+            battle_id={battle.id}
             title={battle.title}
             description={battle.description}
             username={battle.user.username}
             battle_type={battle.battle_type}
             date={battle.date}
+            token={token}
           />
         </div>
       ))}
@@ -111,8 +136,7 @@ const formSchema = z.object({
   date: z.date(),
 });
 
-export function BattleForm() {
-  const { token } = useContext(AuthContext);
+export function BattleForm({ token }) {
   const { toast } = useToast();
   const defaultValues = {
     title: "",
@@ -258,14 +282,14 @@ export function BattleForm() {
   );
 }
 
-export function BattlePopover() {
+export function BattlePopover({ token }) {
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="outline">Create</Button>
       </PopoverTrigger>
       <PopoverContent>
-        <BattleForm />
+        <BattleForm token={token} />
       </PopoverContent>
     </Popover>
   );
@@ -294,13 +318,13 @@ export default function Battle() {
           </div>
           {token && (
             <div className="mr-12">
-              <BattlePopover />
+              <BattlePopover token={token} />
             </div>
           )}
         </div>
         <Separator className="my-6" />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Battles />
+          <Battles token={token} />
         </div>
       </div>
       <Toaster />

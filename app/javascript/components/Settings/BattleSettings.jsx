@@ -36,7 +36,7 @@ import { ScrollArea } from "../ui/scroll-area";
 
 //Function for user to join a battle (create a connection)
 export function JoinBattle({ id, token }) {
-  //Fetch the connection 
+  //Fetch the connection
   fetch(`/connection/create/${id}}`, {
     method: "POST",
     headers: {
@@ -51,15 +51,13 @@ export function JoinBattle({ id, token }) {
       }
       return response.json();
     })
-    //Handle if the connection was created successfully or not 
+    //Handle if the connection was created successfully or not
     .then((data) => {
       toast({
         title: "Battle joined successfully",
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">
-              {JSON.stringify(data, null, 2)}
-            </code>
+            <code className="text-white">{JSON.stringify(data, null, 2)}</code>
           </pre>
         ),
       });
@@ -316,7 +314,9 @@ export default function BattleSetting() {
           Here are all of your Battle Postings:
         </p>
         {battles.map((battle) => {
-          return <BattleSettingCard battle={battle} token={token} />;
+          return (
+            <BattleSettingCard key={battle.id} battle={battle} token={token} />
+          );
         })}
       </div>
       <Separator />

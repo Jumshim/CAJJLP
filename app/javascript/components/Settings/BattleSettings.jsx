@@ -7,12 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import Settings from "./Settings";
-import { Textarea } from "../ui/textarea";
-import { Avatar, AvatarImage } from "../ui/avatar";
 import { toast, useToast } from "../ui/use-toast";
 import { AuthContext } from "../AuthProvider";
-import { Toaster } from "../ui/toaster";
 import {
   CardContent,
   CardHeader,

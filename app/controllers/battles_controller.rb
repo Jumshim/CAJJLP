@@ -29,6 +29,16 @@ class BattlesController < ApplicationController
     render json: battles_without_connections.as_json(include: {user: { only: :username}})
   end
 
+  def connected_battles
+    battles_with_connection_ids = current_user.connections.map do |connection|
+      {
+        battle: connection.battle,
+        connection_id: connection.id
+      }
+    end
+    render json: battles_with_connection_ids
+  end
+
   def user_battles
     battles = current_user.battles
     render json: battles.as_json

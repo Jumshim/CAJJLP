@@ -208,6 +208,47 @@ export function UpdateBattleForm({ id, token }) {
   );
 }
 
+export function ConnectedBattleSettingCard({ battle, connection_id, token }) {
+  function deleteConnectedBattle() {
+    fetch(`/connection/${connection_id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error in deleting connection");
+        }
+        return response.json();
+      })
+      .then(() => {
+        navigate("/settings/battles");
+      });
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>{battle.title}</CardTitle>
+        <CardDescription>{battle.description}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p>
+          {battle.username} wants to play a {battle.battle_type} match at:
+        </p>
+        <p>{battle.date}</p>
+      </CardContent>
+      <CardFooter>
+        <Button onClick={deleteConnectedBattle} variant="destructive">
+          Delete Connected Battle
+        </Button>
+      </CardFooter>
+    </Card>
+  );
+}
+
 export function BattleSettingCard({ battle, token }) {
   function deleteBattle() {
     fetch(`/battles/${battle.id}`, {
@@ -253,13 +294,14 @@ export function BattleSettingCard({ battle, token }) {
 export default function BattleSetting() {
   const { token } = useContext(AuthContext);
   const [battles, setBattles] = useState([]);
+  const [connectedBattles, setConnectedBattles] = useState([]);
 
   useEffect(() => {
     getBattles();
+    getConnectedBattles();
   }, []);
 
-  function getBattles() {
-    //fetch function to make a GET request to "/connected_battles" 
+  function getConnectedBattles() {
     fetch("/connected_battles", {
       method: "GET",
       headers: {
@@ -268,7 +310,7 @@ export default function BattleSetting() {
       },
     })
       .then((response) => {
-        //check if the response was successful or not 
+        //check if the response was successful or not
         if (!response.ok) {
           console.log("Error fetching connected battles");
           return;
@@ -277,15 +319,18 @@ export default function BattleSetting() {
         return response.json();
       })
       .then((data) => {
-        //Set the fetched battles in the component state 
-        setBattles(data);
+        //Set the fetched battles in the component state
+        setConnectedBattles(data);
       })
       .catch((error) => {
-        //Log any errors that occur when fetching 
+        //Log any errors that occur when fetching
         console.error("Error:", error);
       });
-  
-    
+  }
+
+  function getBattles() {
+    //fetch function to make a GET request to "/connected_battles"
+
     fetch("/user_battles", {
       method: "GET",
       headers: {
@@ -315,6 +360,22 @@ export default function BattleSetting() {
         {battles.map((battle) => {
           return (
             <BattleSettingCard key={battle.id} battle={battle} token={token} />
+          );
+        })}
+      </div>
+      <div>
+        <h3 className="text-lg font-medium">Connected Battles</h3>
+        <p className="text-sm text-muted-foreground">
+          Here are all of your Connected Battles:
+        </p>
+        {connectedBattles.map((connectedBattle) => {
+          return (
+            <ConnectedBattleSettingCard
+              key={connectedBattle.id}
+              battle={connectedBattle.battle}
+              connection_id={connectedBattle.connection_id}
+              token={token}
+            />
           );
         })}
       </div>

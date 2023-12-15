@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   get '/battles', to: 'battles#index'
   get '/user_battles', to: 'battles#user_battles'
+  get '/connected_battles', to: 'battles#connected_battles'
   post '/battles/create', to: 'battles#create'
   post '/battles/:id', to: 'battles#update' #route for updating battles 
   delete '/battles/:id', to: 'battles#destroy'

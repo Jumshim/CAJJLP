@@ -287,6 +287,33 @@ export default function BattleSetting() {
   }, []);
 
   function getBattles() {
+    //fetch function to make a GET request to "/connected_battles" 
+    fetch("/connected_battles", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        //check if the response was successful or not 
+        if (!response.ok) {
+          console.log("Error fetching connected battles");
+          return;
+        }
+        //Parse the JSON data from the response
+        return response.json();
+      })
+      .then((data) => {
+        //Set the fetched battles in the component state 
+        setBattles(data);
+      })
+      .catch((error) => {
+        //Log any errors that occur when fetching 
+        console.error("Error:", error);
+      });
+  }
+    
     fetch("/user_battles", {
       method: "GET",
       headers: {

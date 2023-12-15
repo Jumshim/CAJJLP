@@ -33,7 +33,7 @@ export function MainHeader() {
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Avatar className="h-10 w-10 border-2">
-                <AvatarImage src="https://i.pinimg.com/originals/09/da/92/09da926c2b94d95008a9e3b2f60bfdd3.png" />
+                <AvatarImage className="bg-red-400" />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>

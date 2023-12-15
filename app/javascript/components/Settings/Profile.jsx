@@ -136,7 +136,7 @@ export function ProfileForm() {
                 <Input placeholder={formDefaults.profile_pic} {...field} />
               </FormControl>
               <Avatar>
-                <AvatarImage src={field.value || formDefaults.profile_pic} />
+                <AvatarImage className="bg-red-400" />
               </Avatar>
             </FormItem>
           )}

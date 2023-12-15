@@ -312,7 +312,7 @@ export default function BattleSetting() {
         //Log any errors that occur when fetching 
         console.error("Error:", error);
       });
-  }
+  
     
     fetch("/user_battles", {
       method: "GET",

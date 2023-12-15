@@ -35,34 +35,6 @@ import { Calendar } from "../ui/calendar";
 import { ScrollArea } from "../ui/scroll-area";
 
 //Function for user to join a battle (create a connection)
-export function JoinBattle({ id, token }) {
-  //Fetch the connection
-  fetch(`/connection/create/${id}}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(requestBody),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        return;
-      }
-      return response.json();
-    })
-    //Handle if the connection was created successfully or not
-    .then((data) => {
-      toast({
-        title: "Battle joined successfully",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-          </pre>
-        ),
-      });
-    });
-}
 
 export function UpdateBattlePopover({ id, token }) {
   return (
